@@ -43,6 +43,14 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --danger-500: 0 84% 60%;
+    --warning-500: 38 92% 50%;
+    --warning-700: 35 92% 33%;
+    --warning-100: 39 100% 93%;
+    --danger-700: 0 74% 42%;
+    --danger-100: 0 100% 95%;
+    --freshGreen-50: 142 60% 97%;
   }
 
   .dark {
@@ -97,4 +105,78 @@
 
 .gradient-green {
   background: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(152, 76%, 50%));
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hover-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient text for headings */
+.gradient-text {
+  background: linear-gradient(135deg, hsl(142, 76%, 36%), hsl(120, 61%, 50%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Pulse animation for critical alerts */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+/* Enhanced Form Elements */
+.form-input-enhanced {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  background-color: #f9f9f9;
+}
+
+.form-input-enhanced:focus {
+  border-color: hsl(142, 76%, 36%);
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+}
+
+/* Card animations */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
 }
