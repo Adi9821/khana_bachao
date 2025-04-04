@@ -1,4 +1,3 @@
-
 import React from "react";
 import { 
   Card,
@@ -14,34 +13,53 @@ import { format, addDays } from "date-fns";
 // ML model simulation for food expiry prediction
 // In a real application, this would be replaced with actual ML model predictions
 const predictExpiry = (data: FoodItemData): {days: number, risk: string} => {
-  // Base days for each category under normal conditions
+  // Updated base days for each category under normal conditions with more realistic values
   const baseDays: Record<string, number> = {
-    fruits: 7,
-    vegetables: 5,
-    dairy: 7,
-    meat: 3,
-    bakery: 5
+    fruits: 5,        // Reduced from 7 to 5
+    vegetables: 4,    // Reduced from 5 to 4
+    dairy: 4,         // Reduced from 7 to 4 (major change for milk products)
+    meat: 2,          // Reduced from 3 to 2
+    bakery: 3         // Reduced from 5 to 3
   };
   
-  // Get base days or default to 5 if category not found
-  let days = baseDays[data.category] || 5;
+  // Get base days or default to 3 if category not found (reduced default from 5 to 3)
+  let days = baseDays[data.category] || 3;
+  
+  // More granular adjustments based on specific food items
+  if (data.name.toLowerCase().includes('milk')) {
+    days = 3; // Milk specifically lasts about 3 days after opening
+  } else if (data.name.toLowerCase().includes('yogurt')) {
+    days = 5; // Yogurt lasts a bit longer
+  } else if (data.name.toLowerCase().includes('cheese') && !data.name.toLowerCase().includes('cottage')) {
+    days = 7; // Hard cheese lasts longer
+  } else if (data.name.toLowerCase().includes('cottage cheese')) {
+    days = 4; // Cottage cheese is shorter
+  } else if (data.name.toLowerCase().includes('leafy') || 
+             data.name.toLowerCase().includes('lettuce') || 
+             data.name.toLowerCase().includes('spinach')) {
+    days = 2; // Leafy greens spoil quickly
+  } else if (data.name.toLowerCase().includes('berries')) {
+    days = 2; // Berries spoil quickly
+  } else if (data.name.toLowerCase().includes('bread')) {
+    days = 3; // Fresh bread
+  }
   
   // Temperature adjustment (temperature has strong effect)
-  // Higher temperature reduces shelf life
+  // Higher temperature reduces shelf life - made effects stronger
   if (data.temperature > 30) {
-    days *= 0.3; // Significant reduction
+    days *= 0.2; // More significant reduction at high temperatures
   } else if (data.temperature > 25) {
-    days *= 0.6;
+    days *= 0.4;
   } else if (data.temperature > 20) {
-    days *= 0.8;
+    days *= 0.6;
   } else if (data.temperature > 10) {
-    days *= 0.9;
+    days *= 0.8;
   } else if (data.temperature > 5) {
     days *= 1.0;
   } else if (data.temperature > 0) {
-    days *= 1.5; // Cold temperatures extend shelf life
+    days *= 1.3; // Cold temperatures extend shelf life, but not as dramatically
   } else {
-    days *= 2.0; // Freezing greatly extends shelf life
+    days *= 1.8; // Freezing extends shelf life, but adjusted to be more realistic
   }
   
   // Humidity adjustment
@@ -58,40 +76,40 @@ const predictExpiry = (data: FoodItemData): {days: number, risk: string} => {
   const humidityDeviation = Math.abs(data.humidity - categoryOptimalHumidity);
   
   if (humidityDeviation > 30) {
-    days *= 0.7;
+    days *= 0.6; // More significant impact
   } else if (humidityDeviation > 20) {
-    days *= 0.8;
+    days *= 0.7;
   } else if (humidityDeviation > 10) {
-    days *= 0.9;
+    days *= 0.85;
   }
   
-  // Packaging adjustment
+  // Packaging adjustment - more realistic adjustments
   switch (data.packaging) {
     case 'vacuum':
-      days *= 2.0; // Vacuum sealing significantly extends shelf life
+      days *= 1.7; // Still extends shelf life, but less dramatically
       break;
     case 'plastic':
-      days *= 1.3;
+      days *= 1.2;
       break;
     case 'glass':
-      days *= 1.4;
+      days *= 1.3;
       break;
     case 'paper':
-      days *= 1.1;
+      days *= 0.9; // Paper slightly reduces shelf life for most items
       break;
     case 'none':
-      days *= 0.8; // No packaging reduces shelf life
+      days *= 0.7; // No packaging significantly reduces shelf life
       break;
   }
   
   // Round to 1 decimal place
   days = Math.round(days * 10) / 10;
   
-  // Determine risk level
+  // More realistic risk thresholds
   let risk = "low";
-  if (days < 2) {
+  if (days < 1.5) {
     risk = "high";
-  } else if (days < 4) {
+  } else if (days < 3) {
     risk = "medium";
   }
   
