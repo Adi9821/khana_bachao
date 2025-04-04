@@ -7,8 +7,7 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { SavedFoodItem, getExpiringItems, getSavedFoodItems } from "@/utils/localStorage";
-import { Chart, ChartData } from "react-chartjs-2";
-import { 
+import {
   Chart as ChartJS,
   ArcElement,
   CategoryScale,
@@ -17,7 +16,8 @@ import {
   Title,
   Tooltip,
   Legend
-} from "chart.js";
+} from 'chart.js';
+import { Pie, Doughnut } from 'react-chartjs-2';
 import { AlertCircle, Check, Clock } from "lucide-react";
 
 // Register ChartJS components
@@ -109,8 +109,7 @@ const FoodStats: React.FC = () => {
             <div>
               <h3 className="font-medium text-sm mb-3">Food Categories</h3>
               <div className="aspect-square max-w-[180px] mx-auto">
-                <Chart
-                  type="pie"
+                <Pie
                   data={categoryData}
                   options={{
                     plugins: {
@@ -132,8 +131,7 @@ const FoodStats: React.FC = () => {
             <div>
               <h3 className="font-medium text-sm mb-3">Expiry Status</h3>
               <div className="aspect-square max-w-[180px] mx-auto">
-                <Chart
-                  type="doughnut"
+                <Doughnut
                   data={expiryData}
                   options={{
                     plugins: {
