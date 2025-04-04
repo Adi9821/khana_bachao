@@ -21,7 +21,6 @@ const ExpiryAlerts: React.FC<ExpiryAlertsProps> = ({ foodData, expiryDays }) => 
         title: "Critical Expiry Alert",
         description: `${foodData.name} will expire within 2 days! Consume immediately.`,
         variant: "destructive" as const,
-        actionText: "Add to Shopping List"
       };
     } else if (expiryDays < 4) {
       return {
