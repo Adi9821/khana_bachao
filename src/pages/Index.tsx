@@ -197,19 +197,22 @@ const Index = () => {
       
       <Footer />
       
-      <style jsx global>{`
-        .gradient-text {
-          background: linear-gradient(135deg, #2e7d32, #4caf50);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .hover-scale {
-          transition: transform 0.3s ease;
-        }
-        .hover-scale:hover {
-          transform: scale(1.03);
-        }
-      `}</style>
+      {/* Replacing style jsx tag with standard style tag */}
+      <style>
+        {`
+          .gradient-text {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          .hover-scale {
+            transition: transform 0.3s ease;
+          }
+          .hover-scale:hover {
+            transform: scale(1.03);
+          }
+        `}
+      </style>
     </div>
   );
 };
