@@ -1,16 +1,30 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FoodItemForm, { FoodItemData } from "@/components/FoodItemForm";
 import ExpiryPrediction from "@/components/ExpiryPrediction";
 import ExpiryAlerts from "@/components/ExpiryAlerts";
+import SavedFoodItems from "@/components/SavedFoodItems";
+import ExpiryNotifications from "@/components/ExpiryNotifications";
+import FoodStats from "@/components/FoodStats";
 import { toast } from "sonner";
-import { Trophy, ClipboardList, UserRound } from "lucide-react";
+import { Trophy, ClipboardList, UserRound, Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { addDays, format } from "date-fns";
+import { saveFoodItem } from "@/utils/localStorage";
 
 const Index = () => {
   const [foodData, setFoodData] = useState<FoodItemData | null>(null);
   const [expiryDays, setExpiryDays] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState("prediction");
+
+  // Check for expiring items on component mount
+  useEffect(() => {
+    // Trigger a custom event to refresh expiring items
+    window.dispatchEvent(new Event('fooditem-saved'));
+  }, []);
 
   const handleFormSubmit = (data: FoodItemData) => {
     setFoodData(data);
@@ -38,6 +52,40 @@ const Index = () => {
         });
       }
     }, 800);
+  };
+
+  const handleSaveItem = () => {
+    if (!foodData || expiryDays === null) return;
+    
+    try {
+      // Calculate expiry date based on current date + expiry days
+      const expiryDate = addDays(new Date(), expiryDays).toISOString();
+      
+      // Save the item
+      saveFoodItem({
+        name: foodData.name,
+        category: foodData.category,
+        expiryDate,
+        expiryDays,
+        temperature: foodData.temperature,
+        humidity: foodData.humidity,
+        packaging: foodData.packaging,
+      });
+      
+      // Show success message
+      toast.success(`${foodData.name} added to your tracking list`, {
+        description: `Will expire on ${format(new Date(expiryDate), 'MMMM d, yyyy')}`,
+      });
+      
+      // Trigger custom event to refresh saved items list
+      window.dispatchEvent(new Event('fooditem-saved'));
+      
+      // Switch to inventory tab
+      setActiveTab("inventory");
+      
+    } catch (error) {
+      toast.error("Failed to save food item");
+    }
   };
 
   // Simple simulation function for quick predictions
@@ -129,21 +177,59 @@ const Index = () => {
             </p>
           </div>
           
+          {/* Notification panel for expiring items */}
+          <ExpiryNotifications />
+          
           {foodData && expiryDays !== null && (
             <div className="mb-6">
               <ExpiryAlerts foodData={foodData} expiryDays={expiryDays} />
+              
+              {/* Save button */}
+              <div className="mt-3 flex justify-end">
+                <Button 
+                  onClick={handleSaveItem}
+                  className="gradient-green gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  Save and Track This Item
+                </Button>
+              </div>
             </div>
           )}
           
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              <FoodItemForm onSubmit={handleFormSubmit} />
-            </div>
+          {/* Tabs for different views */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="prediction">Prediction Tool</TabsTrigger>
+              <TabsTrigger value="inventory">Inventory & Stats</TabsTrigger>
+            </TabsList>
             
-            <div className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
-              <ExpiryPrediction foodData={foodData} />
-            </div>
-          </div>
+            {/* Prediction Tab */}
+            <TabsContent value="prediction" className="mt-4">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
+                  <FoodItemForm onSubmit={handleFormSubmit} />
+                </div>
+                
+                <div className="animate-fade-in" style={{ animationDelay: "0.3s" }}>
+                  <ExpiryPrediction foodData={foodData} />
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Inventory Tab */}
+            <TabsContent value="inventory" className="mt-4">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="animate-fade-in">
+                  <SavedFoodItems />
+                </div>
+                
+                <div className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
+                  <FoodStats />
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
           
           {/* Features section with animation */}
           <div className="mt-16 animate-fade-in" style={{ animationDelay: "0.5s" }}>
@@ -210,6 +296,10 @@ const Index = () => {
           }
           .hover-scale:hover {
             transform: scale(1.03);
+          }
+          .gradient-green {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
           }
         `}
       </style>
