@@ -11,7 +11,7 @@ const Header = () => {
             <Package className="h-6 w-6 text-freshGreen-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-freshGreen-700">FoodWise</h1>
+            <h1 className="text-2xl font-bold text-freshGreen-700">NiTyA_tAzA</h1>
             <p className="text-sm text-muted-foreground">AI-Driven Food Expiry Predictor</p>
           </div>
         </div>
