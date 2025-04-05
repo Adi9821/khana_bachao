@@ -20,21 +20,16 @@ const Index = () => {
   const [expiryDays, setExpiryDays] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("prediction");
 
-  // Check for expiring items on component mount
   useEffect(() => {
-    // Trigger a custom event to refresh expiring items
     window.dispatchEvent(new Event('fooditem-saved'));
   }, []);
 
   const handleFormSubmit = (data: FoodItemData) => {
     setFoodData(data);
-    // Simulate ML model processing
     setTimeout(() => {
-      // This would come from the ML model in a real application
       const days = simulateExpiryPrediction(data);
       setExpiryDays(days);
       
-      // Show expiry notification
       if (days < 2) {
         toast.error(`Critical Alert: ${data.name} will expire very soon!`, {
           description: "Consume immediately to avoid waste.",
@@ -58,10 +53,8 @@ const Index = () => {
     if (!foodData || expiryDays === null) return;
     
     try {
-      // Calculate expiry date based on current date + expiry days
       const expiryDate = addDays(new Date(), expiryDays).toISOString();
       
-      // Save the item
       saveFoodItem({
         name: foodData.name,
         category: foodData.category,
@@ -72,15 +65,12 @@ const Index = () => {
         packaging: foodData.packaging,
       });
       
-      // Show success message
       toast.success(`${foodData.name} added to your tracking list`, {
         description: `Will expire on ${format(new Date(expiryDate), 'MMMM d, yyyy')}`,
       });
       
-      // Trigger custom event to refresh saved items list
       window.dispatchEvent(new Event('fooditem-saved'));
       
-      // Switch to inventory tab
       setActiveTab("inventory");
       
     } catch (error) {
@@ -88,37 +78,34 @@ const Index = () => {
     }
   };
 
-  // Updated simulation function for quick predictions
   const simulateExpiryPrediction = (data: FoodItemData): number => {
-    // Updated base days for each category under normal conditions with more realistic values
     const baseDays: Record<string, number> = {
       fruits: 5,        // Reduced from 7 to 5
       vegetables: 4,    // Reduced from 5 to 4
-      dairy: 4,         // Reduced from 7 to 4 (major change for milk products)
+      dairy: 4,         // Reduced from 7 to 4
       meat: 2,          // Reduced from 3 to 2
       bakery: 3         // Reduced from 5 to 3
     };
     
-    // Get base days or default to 3 if category not found
     let days = baseDays[data.category] || 3;
     
     // More granular adjustments based on specific food items
     if (data.name.toLowerCase().includes('milk')) {
-      days = 3; // Milk specifically lasts about 3 days after opening
+      days = 3; 
     } else if (data.name.toLowerCase().includes('yogurt')) {
-      days = 5; // Yogurt lasts a bit longer
+      days = 5; 
     } else if (data.name.toLowerCase().includes('cheese') && !data.name.toLowerCase().includes('cottage')) {
-      days = 7; // Hard cheese lasts longer
+      days = 7; 
     } else if (data.name.toLowerCase().includes('cottage cheese')) {
-      days = 4; // Cottage cheese is shorter
+      days = 4; 
     } else if (data.name.toLowerCase().includes('leafy') || 
               data.name.toLowerCase().includes('lettuce') || 
               data.name.toLowerCase().includes('spinach')) {
-      days = 2; // Leafy greens spoil quickly
+      days = 2; 
     } else if (data.name.toLowerCase().includes('berries')) {
-      days = 2; // Berries spoil quickly
+      days = 2; 
     } else if (data.name.toLowerCase().includes('bread')) {
-      days = 3; // Fresh bread
+      days = 3; 
     }
     
     // Temperature adjustment - made effects stronger
@@ -203,7 +190,6 @@ const Index = () => {
             <div className="mb-6">
               <ExpiryAlerts foodData={foodData} expiryDays={expiryDays} />
               
-              {/* Save button */}
               <div className="mt-3 flex justify-end">
                 <Button 
                   onClick={handleSaveItem}
@@ -216,14 +202,12 @@ const Index = () => {
             </div>
           )}
           
-          {/* Tabs for different views */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="prediction">Prediction Tool</TabsTrigger>
               <TabsTrigger value="inventory">Inventory & Stats</TabsTrigger>
             </TabsList>
             
-            {/* Prediction Tab */}
             <TabsContent value="prediction" className="mt-4">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
@@ -236,7 +220,6 @@ const Index = () => {
               </div>
             </TabsContent>
             
-            {/* Inventory Tab */}
             <TabsContent value="inventory" className="mt-4">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="animate-fade-in">
@@ -250,7 +233,6 @@ const Index = () => {
             </TabsContent>
           </Tabs>
           
-          {/* Features section with animation */}
           <div className="mt-16 animate-fade-in" style={{ animationDelay: "0.5s" }}>
             <h2 className="text-2xl font-semibold text-center mb-8 gradient-text">
               How It Works
@@ -289,7 +271,6 @@ const Index = () => {
             </div>
           </div>
           
-          {/* Hackathon banner */}
           <div className="mt-16 p-6 rounded-lg bg-gradient-to-r from-freshGreen-600 to-freshGreen-800 text-white text-center shadow-lg animate-fade-in">
             <h2 className="text-2xl font-bold mb-2">FoodWise - Hackathon Edition</h2>
             <p className="max-w-2xl mx-auto">
@@ -302,7 +283,6 @@ const Index = () => {
       
       <Footer />
       
-      {/* Replacing style jsx tag with standard style tag */}
       <style>
         {`
           .gradient-text {
