@@ -272,9 +272,9 @@ const Index = () => {
           </div>
           
           <div className="mt-16 p-6 rounded-lg bg-gradient-to-r from-freshGreen-600 to-freshGreen-800 text-white text-center shadow-lg animate-fade-in">
-            <h2 className="text-2xl font-bold mb-2">FoodWise - Hackathon Edition</h2>
+            <h2 className="text-2xl font-bold mb-2">NiTyA_tAzA</h2>
             <p className="max-w-2xl mx-auto">
-              Our solution tackles food waste by leveraging AI and machine learning to help consumers 
+              Our solution tackles food waste by leveraging AI and dataset to help consumers 
               know exactly when their food will expire. Join us in our mission to reduce global food waste.
             </p>
           </div>

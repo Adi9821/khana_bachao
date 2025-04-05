@@ -107,8 +107,9 @@ const ExpiryNotifications: React.FC = () => {
                   </div>
                 </div>
                 
-                <Button size="sm" variant={isCritical ? "destructive" : "outline"}>
-                  {isCritical ? 'alert' : 'Remind Me'}
+                <Button size="sm" variant={isCritical ? "destructive" : "outline"}
+                >
+                  {isCritical ? 'alert' : 'Remind me'}
                 </Button>
               </li>
             );

@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div>
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} FoodWise AI Expiry Predictor
+              © {new Date().getFullYear()} NiTyA_tAzA AI Expiry Predictor
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Made with <Heart className="inline-block h-3 w-3 text-red-500" /> for sustainable food management
@@ -17,7 +17,7 @@ const Footer = () => {
           </div>
           <div className="flex flex-col mt-4 md:mt-0">
             <p className="text-sm text-muted-foreground mb-2 text-center md:text-right">
-              Powered by AI and ML models for food preservation
+              Powered by AI and dataset models for food preservation
             </p>
             <div className="flex gap-4 justify-center md:justify-end">
               <a href="#" className="text-muted-foreground hover:text-freshGreen-700 transition-colors">
