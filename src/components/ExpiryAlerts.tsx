@@ -55,14 +55,14 @@ const ExpiryAlerts: React.FC<ExpiryAlertsProps> = ({ foodData, expiryDays }) => 
         </div>
       </div>
       <div className="mt-3 flex justify-end">
-        <Button 
+        {/* <Button 
           size="sm" 
           variant="outline"
           className={alertInfo.variant === "destructive" ? "border-danger-500 text-danger-500 hover:bg-danger-50" : ""}
           onClick={() => console.log(`Action clicked for ${foodData.name}`)}
         >
           {alertInfo.actionText}
-        </Button>
+        </Button> */}
       </div>
     </Alert>
   );
